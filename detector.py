@@ -144,6 +144,3 @@ class FasterRCNNDetector(object):
         print('result saved into ', result_path)
         cv2.imwrite(result_path, img)
         cv2.waitKey(0)
-
-    def detect_on_video(self, v):
-        pass
