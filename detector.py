@@ -134,7 +134,7 @@ class FasterRCNNDetector(object):
         pass
 
     def detect_and_save(self,img):
-        boxes = self.detect_on_image(self,img)
+        boxes = self.detect_on_image(img)
         for cls_num, box in boxes.items():
             boxes_nms = roi_helpers.non_max_suppression_fast(box, overlap_thresh=0.5)
             boxes[cls_num] = boxes_nms
