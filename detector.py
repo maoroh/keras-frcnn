@@ -127,14 +127,6 @@ class FasterRCNNDetector(object):
                 boxes[cls_num].append(
                     [self.cfg.rpn_stride * x, self.cfg.rpn_stride * y, self.cfg.rpn_stride * (x + w), self.cfg.rpn_stride * (y + h),
                      np.max(p_cls[0, ii, :])])
-        # add some nms to reduce many boxes
-        for cls_num, box in boxes.items():
-            boxes_nms = roi_helpers.non_max_suppression_fast(box, overlap_thresh=0.5)
-            boxes[cls_num] = boxes_nms
-            print(self.class_mapping[cls_num] + ":")
-            for b in boxes_nms:
-                b[0], b[1], b[2], b[3] = get_real_coordinates(ratio, b[0], b[1], b[2], b[3])
-                print('{} prob: {}'.format(b[0: 4], b[-1]))
         
         return boxes
 
