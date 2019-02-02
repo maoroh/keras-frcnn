@@ -4,7 +4,7 @@ class AnnotationFileGenerator:
     def __init__(self,path_to_annotations_folder, images_path,train_file_path,output_file_path):
         self.path_to_annotations_folder = path_to_annotations_folder
         self.images_path = images_path
-        self.train_file_path = train_file_path
+        self.output_file_path = output_file_path
 
     def generate(self):
         with open(self.train_file_path, 'r') as train_file:
