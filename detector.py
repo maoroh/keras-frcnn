@@ -135,6 +135,7 @@ class FasterRCNNDetector(object):
 
     def detect_and_save(self,img):
         boxes = self.detect_on_image(img)
+        X, ratio = format_img(img, self.cfg)
         for cls_num, box in boxes.items():
             boxes_nms = roi_helpers.non_max_suppression_fast(box, overlap_thresh=0.5)
             boxes[cls_num] = boxes_nms
@@ -143,7 +144,6 @@ class FasterRCNNDetector(object):
                 b[0], b[1], b[2], b[3] = get_real_coordinates(ratio, b[0], b[1], b[2], b[3])
                 print('{} prob: {}'.format(b[0: 4], b[-1]))
         img = draw_boxes_and_label_on_image_cv2(img, self.class_mapping, boxes)
-        print('Elapsed time = {}'.format(time.time() - tic))
         #cv2.imshow('image', img)
 
         result_path = './results_images/{}.png'.format('result')
