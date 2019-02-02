@@ -1,7 +1,7 @@
 import os
 import glob
 class AnnotationFileGenerator:
-    def __init__(self,path_to_annotations_folder, images_path,train_file_path):
+    def __init__(self,path_to_annotations_folder, images_path,train_file_path,output_file_path):
         self.path_to_annotations_folder = path_to_annotations_folder
         self.images_path = images_path
         self.train_file_path = train_file_path
@@ -12,7 +12,7 @@ class AnnotationFileGenerator:
             train_files_list = [x.strip() for x in train_file_content] 
             
         files_list = glob.glob(self.path_to_annotations_folder + '/*.txt')
-        with open('./data/' + "train.txt", 'w') as converted_file:
+        with open(self.output_file_path, 'w') as converted_file:
             for f in files_list:
                 with open(f,'r') as original_file:
                     file_name = os.path.basename(f).split('.')[0]
