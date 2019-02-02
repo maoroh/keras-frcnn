@@ -10,8 +10,7 @@ class AnnotationFileGenerator:
         with open(self.train_file_path, 'r') as train_file:
             train_file_content = train_file.readlines()
             train_files_list = [x.strip() for x in train_file_content] 
-            print(train_files_list)
-          
+            
         files_list = glob.glob(self.path_to_annotations_folder + '/*.txt')
         with open('./data/' + "train.txt", 'w') as converted_file:
             for f in files_list:
