@@ -72,7 +72,7 @@ class FasterRCNNDetector(object):
         self.model_rpn.compile(optimizer='sgd', loss='mse')
         self.model_classifier.compile(optimizer='sgd', loss='mse')
 
-    def detect_on_image(self, img):
+    def detect_on_image(self, img, saveFlag):
         tic = time.time()
 
         X, ratio = format_img(img, self.cfg)
@@ -134,15 +134,16 @@ class FasterRCNNDetector(object):
             print(self.class_mapping[cls_num] + ":")
             for b in boxes_nms:
                 b[0], b[1], b[2], b[3] = get_real_coordinates(ratio, b[0], b[1], b[2], b[3])
-                print('{} prob: {}'.format(b[0: 4], b[-1]))
+                if saveFlag :
+                    print('{} prob: {}'.format(b[0: 4], b[-1]))
         img = draw_boxes_and_label_on_image_cv2(img, self.class_mapping, boxes)
         print('Elapsed time = {}'.format(time.time() - tic))
         #cv2.imshow('image', img)
-
-        result_path = './results_images/{}.png'.format('result')
-        print('result saved into ', result_path)
-        cv2.imwrite(result_path, img)
-        cv2.waitKey(0)
+        if saveFlag :
+            result_path = './results_images/{}.png'.format('result')
+            print('result saved into ', result_path)
+            cv2.imwrite(result_path, img)
+        #cv2.waitKey(0)
         return boxes
 
     def detect_on_video(self, v):
