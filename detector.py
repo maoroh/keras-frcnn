@@ -72,7 +72,7 @@ class FasterRCNNDetector(object):
         self.model_rpn.compile(optimizer='sgd', loss='mse')
         self.model_classifier.compile(optimizer='sgd', loss='mse')
 
-    def detect_on_image(self, img, saveFlag):
+    def detect_on_image(self, img):
         tic = time.time()
 
         X, ratio = format_img(img, self.cfg)
@@ -127,24 +127,23 @@ class FasterRCNNDetector(object):
                 boxes[cls_num].append(
                     [self.cfg.rpn_stride * x, self.cfg.rpn_stride * y, self.cfg.rpn_stride * (x + w), self.cfg.rpn_stride * (y + h),
                      np.max(p_cls[0, ii, :])])
-        # add some nms to reduce many boxes
-        for cls_num, box in boxes.items():
-            boxes_nms = roi_helpers.non_max_suppression_fast(box, overlap_thresh=0.5)
-            boxes[cls_num] = boxes_nms
-            print(self.class_mapping[cls_num] + ":")
-            for b in boxes_nms:
-                b[0], b[1], b[2], b[3] = get_real_coordinates(ratio, b[0], b[1], b[2], b[3])
-                if saveFlag :
-                    print('{} prob: {}'.format(b[0: 4], b[-1]))
-        img = draw_boxes_and_label_on_image_cv2(img, self.class_mapping, boxes)
-        print('Elapsed time = {}'.format(time.time() - tic))
-        #cv2.imshow('image', img)
-        if saveFlag :
-            result_path = './results_images/{}.png'.format('result')
-            print('result saved into ', result_path)
-            cv2.imwrite(result_path, img)
-        #cv2.waitKey(0)
+                for cls_num, box in boxes.items():
+                    boxes_nms = roi_helpers.non_max_suppression_fast(box, overlap_thresh=0.5)
+                    boxes[cls_num] = boxes_nms
         return boxes
+
+    def saveToResultImg(self,img,boxes):
+         # add some nms to reduce many boxes
+        print(self.class_mapping[cls_num] + ":")
+        for b in boxes_nms:
+            b[0], b[1], b[2], b[3] = get_real_coordinates(ratio, b[0], b[1], b[2], b[3])
+            print('{} prob: {}'.format(b[0: 4], b[-1]))
+        img = draw_boxes_and_label_on_image_cv2(img, self.class_mapping, boxes)
+
+        result_path = './results_images/{}.png'.format('result')
+        print('result saved into ', result_path)
+        cv2.imwrite(result_path, img)
+        cv2.waitKey(0)
 
     def detect_on_video(self, v):
         pass
