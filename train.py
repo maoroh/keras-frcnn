@@ -1,3 +1,4 @@
+
 from __future__ import division
 import random
 import pprint
@@ -18,7 +19,7 @@ from keras_frcnn import resnet as nn
 from keras_frcnn.simple_parser import get_data
 
 
-def train_kitti():
+def train():
     # config for data argument
     cfg = config.Config()
 
@@ -250,4 +251,4 @@ def train_kitti():
 
 
 if __name__ == '__main__':
-    train_kitti()
+    train()
